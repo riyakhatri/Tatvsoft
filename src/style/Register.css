@@ -1,0 +1,21 @@
+.button{
+  width: 100px;
+  height: 92px;
+  padding-left: 60px;
+
+}
+.butdiv{
+  margin-top: 60px;
+  margin-block-start: 60px;
+}
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+  height: 45px;
+  width: 136px;
+  background-color: #f14d54;
+}
+
+
+/* .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root{
+  height: 50px;
+  width: 500px; */
+/* } */

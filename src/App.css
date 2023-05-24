@@ -1,7 +1,14 @@
 .App {
   text-align: center;
 }
-
+body{
+  font-family: 'Roboto','sans-serif';
+}
+.error{
+  position: absolute;
+  color: red;
+  font-size: .6rem;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -18,21 +25,7 @@ table{
   align-items: center;
 }
 
-th{
-  font: sans-serif;
-  border-bottom: 1px solid black;
-  font-size: 32px;
-}
-td {
-  text-align: center;
-  font-size: 22px;
-}
-th,td{
- 
-  
-  padding: 8px;
-  
-}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
