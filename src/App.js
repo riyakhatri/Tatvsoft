@@ -2,12 +2,14 @@
 
 
 import './App.css';
-import Header from './component/Header';
+
 
 import Register from './pages/Register';
+import Login from './pages/login';
 
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ProductList from './pages/productList';
 
 
 function App() {
@@ -17,7 +19,10 @@ function App() {
     <BrowserRouter>
       <Routes>
        
+        <Route path='/Register' Component={Register} />
         <Route path='/' Component={Register} />
+        <Route path='/productList' Component={ProductList} />
+        <Route path='/login' Component={Login} />
         
       </Routes>
     </BrowserRouter>

@@ -1,10 +1,12 @@
 import React from 'react';
 import Header from '../component/Header';
-import ReactDOM from 'react-dom';
+
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import '../style/Register.css';
-import { Box, Button,Grid,TextField } from '@mui/material';
+
+import {  Button,Grid,TextField,Breadcrumbs,Link,Typography } from '@mui/material';
+import Footer from '../component/Footer';
 
 
 const validationSchema = yup.object({
@@ -23,6 +25,7 @@ const validationSchema = yup.object({
 });
 
 const Register = () => {
+  
   const formik = useFormik({
     initialValues: {
       firstname:"",
@@ -35,7 +38,9 @@ const Register = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      
+     alert(JSON.stringify(values, null, 2));
+     
     },
   });
 
@@ -43,86 +48,129 @@ const Register = () => {
     
     <div>
       <Header />
-      <form onSubmit={formik.handleSubmit}>
-        <h1 align="center" style={{marginBottom:50}}>Login or Create an account</h1>
-        <br/>
-        <br/>
+      <br />
+      <Breadcrumbs separator=">" 
+        aria-label="breadcrump"
+        className="breadcrump-wrapper" style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop:"50",
+          fontSize:18}}>
+      <Link color="inherit" href="/" title="Home" style={{textDecoration:"none",fontSize:18}}>Home</Link>
+      <Typography color="#f14d53" style={{fontSize:18}}>Create an Account</Typography>
+      
+    </Breadcrumbs><form onSubmit={formik.handleSubmit}>
+        <h1 align="center" style={{ marginBottom: 25, marginTop: 50 }}>Login or Create an account</h1>
         
-        <h3 align="left" style={{paddingLeft:50}}>Personal Information</h3>
-        <Grid  direction="column" paddingLeft={30}>
+        <center><hr
+          style={{
+            background: 'red',
+            color: 'red',
+            borderColor: 'red',
+            height: '0.5px',
+            marginInline: "30px",
+            width:'200px',
+            
+          }} />
+          </center>
+        <br />
+
+
+        <h3 align="left" style={{ paddingLeft: 50, marginTop: 30 }}>Personal Information</h3>
+        <hr
+          style={{
+            background: 'whitesmoke',
+            color: 'whitesmoke',
+            borderColor: 'whitesmoke',
+            height: '0.2px',
+            marginInline: "30px"
+          }} />
+        <h4>Please enter the follwing information to create your Account</h4>
+        <Grid direction="column" paddingLeft={30}>
           <Grid direction="row">
-        <TextField style={{height:50,width:600,marginInline:30
-        }}
-          fullWidth
-          id="firstname"
-          name="firstname"
-          label="FirstName"
-          value={formik.values.firstname}
-          onChange={formik.handleChange}
-          error={formik.touched.firstname && Boolean(formik.errors.firstname)}
-          helperText={formik.touched.firstname && formik.errors.firstname}
-        />
-        <TextField style={{height:50,width:600,marginInline:30
-        }}
-          fullWidth
-          id="lastname"
-          name="lastname"
-          label="LastName"
-          value={formik.values.lastname}
-          onChange={formik.handleChange}
-          error={formik.touched.lastname && Boolean(formik.errors.lastname)}
-          helperText={formik.touched.lastname && formik.errors.lastname}
-        />
+            <TextField style={{
+              height: 50, width: 600, marginInline: 30, marginTop: 20
+            }}
+              fullWidth
+              id="firstname"
+              name="firstname"
+              label="FirstName *"
+              value={formik.values.firstname}
+              onChange={formik.handleChange}
+              error={formik.touched.firstname && Boolean(formik.errors.firstname)}
+              helperText={formik.touched.firstname && formik.errors.firstname} />
+            <TextField style={{
+              height: 50, width: 600, marginInline: 30, marginTop: 20
+            }}
+              fullWidth
+              id="lastname"
+              name="lastname"
+              label="LastName *"
+              value={formik.values.lastname}
+              onChange={formik.handleChange}
+              error={formik.touched.lastname && Boolean(formik.errors.lastname)}
+              helperText={formik.touched.lastname && formik.errors.lastname} />
+          </Grid>
+          <Grid direction="row">
+            <TextField style={{
+              height: 50, width: 600, marginInline: 30, marginBlockStart: 30
+            }}
+              fullWidth
+              id="email"
+              name="email"
+              label="Email Address *"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email} />
+          </Grid>
         </Grid>
-        <Grid  direction="row" >
-        <TextField style={{height:50,width:600,marginInline:30,marginBlockStart:30
-        }}
-          fullWidth
-          id="email"
-          name="email"
-          label="Email Address"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-        />
-        </Grid>
-        </Grid>
-        <h3 align="left" style={{paddingLeft:50}}>Login Information</h3>
+        <h3 align="left" style={{ paddingLeft: 50 }}>Login Information</h3>
+        <hr
+          style={{
+            background: 'whitesmoke',
+            color: 'whitesmoke',
+            borderColor: 'whitesmoke',
+            height: '0.2px',
+            marginInline: "30px"
+          }} />
         <Grid direction="row" paddingLeft={30}>
-        <TextField style={{height:50,width:600,marginInline:30
-        }}
-          fullWidth
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-        
-        <TextField style={{height:50,width:600,marginInline:30
-        }}
-          fullWidth
-          id="confirmpassword"
-          name="confirmpassword"
-          label="Confirm Password"
-          type="password"
-          value={formik.values.confirmpassword}
-          onChange={formik.handleChange}
-          error={formik.touched.confirmpassword && Boolean(formik.errors.confirmpassword)}
-          helperText={formik.touched.confirmpassword && formik.errors.confirmpassword}
-        />
+          <TextField style={{
+            height: 50, width: 600, marginInline: 30, marginTop: 20
+          }}
+            fullWidth
+            id="password"
+            name="password"
+            label="Password *"
+            
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password} />
+
+          <TextField style={{
+            height: 50, width: 600, marginInline: 30, marginTop: 20
+          }}
+            fullWidth
+            id="confirmpassword"
+            name="confirmpassword"
+            label="Confirm Password *"
+            type="password"
+            value={formik.values.confirmpassword}
+            onChange={formik.handleChange}
+            error={formik.touched.confirmpassword && Boolean(formik.errors.confirmpassword)}
+            helperText={formik.touched.confirmpassword && formik.errors.confirmpassword} />
         </Grid>
-        <div align="left" className='butdiv' >
-        <Button color="primary" variant="contained" fullWidth type="submit" style={{ marginInlineStart: 270}}>
-          Submit
-        </Button>
+        <div align="left" className='butdiv'>
+          <Button color="primary" variant="contained" fullWidth type="submit" style={{ marginInlineStart: 270, backgroundColor: '#f14d53',color:'white' }}>
+           
+            Submit
+          </Button>
         </div>
-        
+
       </form>
+      <Footer />
     </div>
   );
 };

@@ -55,10 +55,15 @@ code {
   color: rgb(65,65,65);
   border-color: rgb(65,65,65);
 }
-
-.MuiButtonBase-root.MuiButton-root.MuiButton-contained{
-  background-color: #f14d54;
+#footer{
+  height: 100px;
+ width: 300px;
+ padding-top:50px;
+  
+  background-color: whitesmoke
+  
 }
+
 
 h1{
   font-size: 32px;

@@ -8,10 +8,18 @@
   margin-top: 60px;
   margin-block-start: 60px;
 }
-.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained  {
   height: 45px;
   width: 136px;
-  background-color: #f14d54;
+ 
+}
+h3{
+  margin-top: 70px;
+}
+h4{
+  color: gray;
+  font-weight: 200;
+  margin-inline: 40px;
 }
 
 
