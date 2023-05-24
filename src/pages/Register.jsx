@@ -1,13 +1,18 @@
 import React from 'react';
 import Header from '../component/Header';
-
+import userServices from '../service/user.service';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import '../style/Register.css';
+import axios from "axios"; 
 
-import {  Button,Grid,TextField,Breadcrumbs,Link,Typography } from '@mui/material';
+import {  Button,Grid,TextField,Breadcrumbs,Link,Typography, FormControl, InputLabel, Select,  MenuItem } from '@mui/material';
+
 import Footer from '../component/Footer';
-
+import { toast } from 'react-toastify';
+import authService from '../service/auth.service';
+import { Navigate, useNavigate } from 'react-router-dom';
+const { useState, useEffect } = require("react");
 
 const validationSchema = yup.object({
   email: yup
@@ -20,27 +25,39 @@ const validationSchema = yup.object({
     .required('Password is required'),
     confirmpassword:yup.string().oneOf([yup.ref("password"),null],"Password and Confirm Password must be match.")
   .required("Confirm Password is required"),
-    firstname:yup.string().required("First name is required"),
-  lastname:yup.string('Enter your lastNmae').required("last name is required"),
+    firstName:yup.string().required("First name is required"),
+  lastName:yup.string('Enter your lastNmae').required("last name is required"),
+  
 });
 
+
 const Register = () => {
-  
+  const [roleList,setRoleList]=useState("");
+  // const navigate=useNavigate();
+const getRoles=()=>{
+  userServices.getAllRoles().then((res)=>{
+    setRoleList(res);
+  });
+};
+
   const formik = useFormik({
     initialValues: {
-      firstname:"",
-      lastname:"",
+      firstName:"",
+      lastName:"",
       email: '',
       password: '',
-      
+      roleId:0,
      
       confirmpassword:'',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      
-     alert(JSON.stringify(values, null, 2));
-     
+      console.log(values)
+      delete values.confirmpassword;
+      authService.create(values).then((res)=>{
+        // navigate("/login");
+        toast.success("sucessfully registered");
+      });
     },
   });
 
@@ -92,24 +109,24 @@ const Register = () => {
               height: 50, width: 600, marginInline: 30, marginTop: 20
             }}
               fullWidth
-              id="firstname"
-              name="firstname"
+              id="firstName"
+              name="firstName"
               label="FirstName *"
-              value={formik.values.firstname}
+              value={formik.values.firstName}
               onChange={formik.handleChange}
-              error={formik.touched.firstname && Boolean(formik.errors.firstname)}
-              helperText={formik.touched.firstname && formik.errors.firstname} />
+              error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+              helperText={formik.touched.firstName && formik.errors.firstName} />
             <TextField style={{
               height: 50, width: 600, marginInline: 30, marginTop: 20
             }}
               fullWidth
-              id="lastname"
-              name="lastname"
+              id="lastName"
+              name="lastName"
               label="LastName *"
-              value={formik.values.lastname}
+              value={formik.values.lastName}
               onChange={formik.handleChange}
-              error={formik.touched.lastname && Boolean(formik.errors.lastname)}
-              helperText={formik.touched.lastname && formik.errors.lastname} />
+              error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+              helperText={formik.touched.lastName && formik.errors.lastName} />
           </Grid>
           <Grid direction="row">
             <TextField style={{
@@ -123,6 +140,12 @@ const Register = () => {
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email} />
+             {/* <div>
+              <Select>
+                <MenuItem defaultValue>Buyer</MenuItem>
+                <MenuItem>seller</MenuItem>
+              </Select>
+             </div> */}
           </Grid>
         </Grid>
         <h3 align="left" style={{ paddingLeft: 50 }}>Login Information</h3>
