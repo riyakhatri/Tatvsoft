@@ -27,18 +27,18 @@ const validationSchema = yup.object({
   .required("Confirm Password is required"),
     firstName:yup.string().required("First name is required"),
   lastName:yup.string('Enter your lastNmae').required("last name is required"),
-  
+  roleId:yup.number().required("please select the role"),
 });
 
 
 const Register = () => {
-  const [roleList,setRoleList]=useState("");
-  // const navigate=useNavigate();
-const getRoles=()=>{
-  userServices.getAllRoles().then((res)=>{
-    setRoleList(res);
-  });
-};
+  // const [roleList,setRoleList]=useState("");
+  const navigate=useNavigate();
+// const getRoles=()=>{
+//   userServices.getAllRoles().then((res)=>{
+//     setRoleList(res);
+//   });
+// };
 
   const formik = useFormik({
     initialValues: {
@@ -46,7 +46,7 @@ const getRoles=()=>{
       lastName:"",
       email: '',
       password: '',
-      roleId:0,
+      
      
       confirmpassword:'',
     },
@@ -55,7 +55,7 @@ const getRoles=()=>{
       console.log(values)
       delete values.confirmpassword;
       authService.create(values).then((res)=>{
-        // navigate("/login");
+        navigate("/login");
         toast.success("sucessfully registered");
       });
     },
@@ -84,7 +84,7 @@ const getRoles=()=>{
             background: 'red',
             color: 'red',
             borderColor: 'red',
-            height: '0.5px',
+            height: '4px',
             marginInline: "30px",
             width:'200px',
             
@@ -96,14 +96,14 @@ const getRoles=()=>{
         <h3 align="left" style={{ paddingLeft: 50, marginTop: 30 }}>Personal Information</h3>
         <hr
           style={{
-            background: 'whitesmoke',
-            color: 'whitesmoke',
+            background: 'gray',
+            color: 'gray',
             borderColor: 'whitesmoke',
-            height: '0.2px',
+            height: '3px',
             marginInline: "30px"
           }} />
-        <h4>Please enter the follwing information to create your Account</h4>
-        <Grid direction="column" paddingLeft={30}>
+        <h4 style={{fontSize:18}}>Please enter the follwing information to create your Account</h4>
+        <Grid direction="column" paddingLeft={30} style={{justifyContent:"center"}}>
           <Grid direction="row">
             <TextField style={{
               height: 50, width: 600, marginInline: 30, marginTop: 20
@@ -140,21 +140,38 @@ const getRoles=()=>{
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email} />
-             {/* <div>
-              <Select>
-                <MenuItem defaultValue>Buyer</MenuItem>
-                <MenuItem>seller</MenuItem>
-              </Select>
-             </div> */}
+            
+                
+                <Select
+                style={{height: 50, width: 600, marginInline: 30, marginBlockStart: 30}}
+                  value={formik.values.roleId}
+                  onChange={formik.handleChange}
+                  label="Role"
+                  // onBlur={handleBlur}
+                  name="roleId"
+                  size="small"
+                  error={formik.touched.roleId && Boolean(formik.errors.roleId)}
+              helperText={formik.touched.roleId && formik.errors.roleId} 
+                  fullWidth
+                 displayEmpty
+                >
+                  <MenuItem value="2"  defaultChecked>Buyer</MenuItem>
+                  <MenuItem value="3" >Seller</MenuItem>
+                </Select>
+               
+                
+              
           </Grid>
         </Grid>
+        <br />
+        <br />
         <h3 align="left" style={{ paddingLeft: 50 }}>Login Information</h3>
         <hr
           style={{
-            background: 'whitesmoke',
-            color: 'whitesmoke',
+            background: 'gray',
+            color: 'gray',
             borderColor: 'whitesmoke',
-            height: '0.2px',
+            height: '3px',
             marginInline: "30px"
           }} />
         <Grid direction="row" paddingLeft={30}>

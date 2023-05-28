@@ -6,8 +6,14 @@ const create =async(data)=>{
         return res.data;
     });
 };
+const login =async(data)=>{
+    const url=`${ENDPOINT}/login`;
+    return request.post(url,data).then((res)=>{
+        return res.data;
+    });
+};
 
 const authService={
-    create,
+    create,login,
 };
 export default authService;
