@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
- 
+
 const request = axios.create({
   //  baseURL: "https://web1.anasource.com/BookStore/api/BookStore/", // url = base url + request url
   //   baseURL: "http://localhost:5000/",
@@ -14,20 +14,20 @@ const request = axios.create({
 // https://book-edsad-sell-node-api.vercel.app/api/user/roles
 let requests = [];
 let conflictRequest = "";
- 
+
 // Request interceptors Customize based on your need
 request.interceptors.request.use(
   async (config) => {
     if (config.headers) {
       config.headers["Content-Type"] = "application/json";
-      config.headers["lang"] = 'en'
+      config.headers["lang"] = "en";
     }
- 
+
     if (config.headers["isDisableLoader"] !== true) {
       requests.push(config.url);
       showLoader();
     }
- 
+
     return config;
   },
   (error) => {
@@ -35,7 +35,7 @@ request.interceptors.request.use(
     Promise.reject(error);
   }
 );
- 
+
 // Response interceptors Customize based on your need
 request.interceptors.response.use(
   (response) => {
@@ -57,15 +57,15 @@ request.interceptors.response.use(
     return Promise.reject(error);
   }
 );
- 
+
 function showLoader() {
   document.body.classList.add("loader-open");
 }
- 
+
 function hideLoader() {
   document.body.classList.remove("loader-open");
 }
- 
+
 // remove completed request
 function removeRequest(req) {
   const i = requests.indexOf(req);
@@ -82,5 +82,5 @@ function removeRequest(req) {
     requests = requests.filter((request) => request !== req);
   }
 }
- 
+
 export default request;
