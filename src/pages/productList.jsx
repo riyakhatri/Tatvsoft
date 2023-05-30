@@ -18,7 +18,7 @@ const rows = [
 function ProductList() {
     return (
         <>
-            <Header />
+            
             <h2>Product Page</h2>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -52,7 +52,7 @@ function ProductList() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Footer />
+            
         </>
     );
 }

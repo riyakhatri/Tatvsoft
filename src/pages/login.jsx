@@ -12,10 +12,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import authService from "../service/auth.service";
-import Header from "../component/Header";
+
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
-import Footer from "../component/Footer";
+
+import { useAuthContext } from "../context/auth";
+
 const validationSchema = yup.object({
   email: yup
     .string("Enter your email")
@@ -28,6 +30,10 @@ const validationSchema = yup.object({
 });
 
 function Login() {
+  const logout=()=>{
+    AuthContext.signOut();
+  }
+  const AuthContext=useAuthContext();
   const navigate=useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -39,14 +45,20 @@ function Login() {
       console.log(values);
       
       authService.login(values).then((res) => {
+        delete res._id;
+        delete res.__v;
+       
+        console.log(res);
+        AuthContext.setUser(res);
         navigate("/productList");
         toast.success("sucessfully Login");
+
       });
     },
   });
   return (
     <div>
-      <Header />
+      
       <br />
 
       <Breadcrumbs
@@ -142,7 +154,7 @@ function Login() {
             <br />
             
            
-          <Button color="primary" variant="contained"  type="submit" style={{  backgroundColor: '#f14d53',color:'white', marginTop:60}}>
+          <Button color="primary" onClick={()=>logout} variant="contained"  type="submit" style={{  backgroundColor: '#f14d53',color:'white', marginTop:60}}>
           
            
            Login
@@ -152,7 +164,7 @@ function Login() {
           </Grid>
         </Grid>
       </form>
-      <Footer />
+      
     </div>
   );
 }

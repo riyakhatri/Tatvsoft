@@ -2,11 +2,16 @@ import React from "react";
 import "./Header.css";
 import Logo from "../assets/images/logo-250symbol2.png";
 // import SearchBar from "./searchbar";
-import { Button, TextField } from "@mui/material";
+import { Button, List, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import FreeSolo from "./searchbar";
+import { AuthContext, useAuthContext } from "../context/auth";
 
 function Header() {
+  const logout=()=>{
+    authContext.signOut();
+  };
+  const authContext =useAuthContext();
   return (
     <div className="head1">
       <div className="head2">
@@ -19,7 +24,8 @@ function Header() {
             <p>sculpting thoughts...</p>
           </div>
         </div>
-        <div className="head4">
+        { !authContext.user.id && (
+          <>        <div className="head4">
           <Button variant="text">
             <Link to="/login" style={{ color: "red", textDecoration: "none" }}>
               Login
@@ -33,11 +39,23 @@ function Header() {
               Register
             </Link>
           </Button>
+          </div>
+          </>
+          )}
 
           <Button variant="outlined" style={{ marginLeft: 15, height: 30 }}>
             Cart
           </Button>
-        </div>
+          {
+            authContext.user.id &&(
+              
+              <Button variant="outlined" onClick={()=>authContext.signOut()} style={{ marginLeft: 15, height: 30 }}>
+              Logout
+            </Button>
+            
+            )
+          }
+        
       </div>
       <div className="head5">
         <FreeSolo />

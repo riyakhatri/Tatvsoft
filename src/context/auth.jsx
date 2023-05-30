@@ -2,13 +2,23 @@ import { useContext, useState } from "react";
 import { useEffect } from "react";
 import { createContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import shared from "../utils/shared";
+const intialUserValue={
+    id:0,
+    email:"",
+    firstName:"",
+    lastName:"",
+    roleId:0,
+    role:"",
+    password:"",
+};
 const initialState={
     setUser:()=>{},
     user:intialUserValue,
     signOut:()=>{},
     appInitialize:false,
 }
+
 export const AuthContext=createContext(initialState);
 
 export const AuthWrapper=({children})=>{
@@ -18,17 +28,32 @@ export const AuthWrapper=({children})=>{
     const {pathname}=useLocation();
 
     const setUser=(user)=>{
-        console.log("abc@wayne2.com",user);
-        localStorage.setItem('user',JSON.stringify(user));
-        _setUser(user)
+        
+        console.log(user);
+        
+        localStorage.setItem(shared.LocalStorageKeys.USER,JSON.stringify(user));
+        
+        _setUser(user);
+        
+        
     };
     useEffect(()=>{
-
+        const str=JSON.parse(localStorage.getItem(shared.LocalStorageKeys.USER))|| intialUserValue;
+        if(str.id){
+            _setUser(str);
+    
+        }
+        if(!str.id){
+            navigate('/productList');
+        }
     },[]);
     const signOut=()=>{
-        setUser(intialUserValue);
-        localStorage.removeItem('user');
-        navigate("/login");
+        
+        localStorage.removeItem(shared.LocalStorageKeys.USER);
+        _setUser(intialUserValue);
+        debugger;
+        navigate('/login');
+        
     };
 
     useEffect(()=>{
@@ -39,7 +64,7 @@ export const AuthWrapper=({children})=>{
         user,
         setUser,
         signOut,
-        appInitialize,
+        
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
