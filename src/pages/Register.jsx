@@ -64,7 +64,7 @@ const Register = () => {
   return (
     
     <div>
-      <Header />
+      
       <br />
       <Breadcrumbs separator=">" 
         aria-label="breadcrump"
@@ -210,7 +210,7 @@ const Register = () => {
         </div>
 
       </form>
-      <Footer />
+      
     </div>
   );
 };

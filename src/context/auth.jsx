@@ -51,7 +51,7 @@ export const AuthWrapper=({children})=>{
         
         localStorage.removeItem(shared.LocalStorageKeys.USER);
         _setUser(intialUserValue);
-        debugger;
+        
         navigate('/login');
         
     };

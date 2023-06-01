@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "./Header.css";
 import Logo from "../assets/images/logo-250symbol2.png";
 // import SearchBar from "./searchbar";
-import { Button, List, TextField } from "@mui/material";
+import { Button, List, ListItem, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import FreeSolo from "./searchbar";
-import { AuthContext, useAuthContext } from "../context/auth";
+import {  useAuthContext } from "../context/auth";
+import shared from "../utils/shared";
 
 function Header() {
-  const logout=()=>{
-    authContext.signOut();
-  };
   const authContext =useAuthContext();
+  const items=useMemo(()=>{
+    return shared.NavigationItems.filter(
+      (item)=>!item.access.length|| item.access.includes(authContext.user.roleId)
+    );
+  },[authContext.user]);
+
+ 
   return (
     <div className="head1">
       <div className="head2">
@@ -24,6 +29,7 @@ function Header() {
             <p>sculpting thoughts...</p>
           </div>
         </div>
+        <List>
         { !authContext.user.id && (
           <>        <div className="head4">
           <Button variant="text">
@@ -42,19 +48,41 @@ function Header() {
           </div>
           </>
           )}
-
+         
+          <br />
+          
+          {items.map((item,index)=>(
+            <List style={{display:"flex"}}>
+            <ListItem key={index} style={{display: "flex",
+              flexDirection: "row",width:"auto"}}>
+              
+              <Link to={item.route} title={item.name}>
+                {item.name}
+              </Link>
+              
+            </ListItem>
+            </List>
+            
+          ))}
+          
+           </List>
+           <List style={{display: "flex"}}>
+            <ListItem>
           <Button variant="outlined" style={{ marginLeft: 15, height: 30 }}>
             Cart
           </Button>
-          {
-            authContext.user.id &&(
-              
-              <Button variant="outlined" onClick={()=>authContext.signOut()} style={{ marginLeft: 15, height: 30 }}>
+          </ListItem>
+          <ListItem >
+          {authContext.user.id &&(
+            
+            <Button variant="outlined" onClick={()=>authContext.signOut()} style={{ marginLeft: 15, height: 30 }}>
               Logout
             </Button>
+             )}
+            </ListItem>
+            </List>
             
-            )
-          }
+           
         
       </div>
       <div className="head5">
