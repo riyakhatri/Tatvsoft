@@ -1,12 +1,31 @@
 import request from "./request";
 const ENDPOINT="api/user";
 const getAllRoles=async()=>{
-    const url="${ENDPOINT}/roles";
+    const url=`${ENDPOINT}/roles`;
     return request.get(url).then((res)=>{
         return res;
     });
-}
+};
+const getAllUsers=async(params)=>{
+    const url=`${ENDPOINT}`;
+    return request.get(url,{params}).then((res)=>{
+        return res;
+    });
+};
+const getById=async(id)=>{
+    const url=`${ENDPOINT}/byId?id=${id}`;
+    return request.get(url).then((res)=>{
+        return res;
+    });
+};
+const deleteUser=async(id)=>{
+    const url=`${ENDPOINT}/Delete?id=${id}`;
+    return request.delete(url).then((res)=>{
+        return res;
+    });
+};
+
 const userService={
-    getAllRoles
+    getAllRoles,getAllUsers,getById,deleteUser
 };
 export default userService;

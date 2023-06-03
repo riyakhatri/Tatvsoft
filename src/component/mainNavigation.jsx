@@ -6,7 +6,8 @@ import Login from "../pages/login";
 import Book from "../pages/Book";
 import EditBook from "../pages/EditBook";
 import { RoutePaths } from "../utils/enum";
-import AddBook from "../pages/AddBook";
+import User from "../pages/user";
+import EditUser from "../pages/EditUser";
 
 const AppRoutes=()=>{
     const authContext=useAuthContext();
@@ -20,8 +21,11 @@ const AppRoutes=()=>{
             <Route exact path='/register' element={!authContext.user.id?<Register/>:<ProductList />} />
             <Route exact path='/productList' element={authContext.user.id?<ProductList/>:<Login />} />
             <Route exact path='/book' element={<Book />} />
-            <Route exact path='/add-book' element={<AddBook />} />
             <Route exact path='/edit-book' element={<EditBook />} />
+            <Route exact path='/edit-book/:id' element={<EditBook />} />
+            <Route exact path='/edit-user/:id' element={<EditUser />} />
+            <Route exact path='user' element={<User />} />
+             
         </Routes>
     );
 }

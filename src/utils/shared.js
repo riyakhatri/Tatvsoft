@@ -6,12 +6,12 @@ const LocalStorageKeys={
 const NavigationItems=[
     {
         name:"Users",
-        route:'./User',
+        route:'/user',
         access:[Role.Admin,Role.Buyer,Role.Seller],
     },
     {
         name:"Categories",
-        route:'./User',
+        route:'/categories',
         access:[Role.Admin,Role.Buyer,Role.Seller],
     },
     {
