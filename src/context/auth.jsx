@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { createContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import shared from "../utils/shared";
+
 const intialUserValue={
     id:0,
     email:"",
@@ -27,6 +28,19 @@ export const AuthWrapper=({children})=>{
     const navigate=useNavigate();
     const {pathname}=useLocation();
 
+   
+    useEffect(()=>{
+        const str=JSON.parse(localStorage.getItem(shared.LocalStorageKeys.USER))|| intialUserValue;
+        if(str.id){
+            _setUser(str);
+            navigate('/productList');
+    
+        }
+        if(!str.id){
+            navigate('/login');
+        }
+        _setUser(str);
+    },[]);
     const setUser=(user)=>{
         
         console.log(user);
@@ -37,16 +51,6 @@ export const AuthWrapper=({children})=>{
         
         
     };
-    useEffect(()=>{
-        const str=JSON.parse(localStorage.getItem(shared.LocalStorageKeys.USER))|| intialUserValue;
-        if(str.id){
-            _setUser(str);
-    
-        }
-        if(!str.id){
-            navigate('/productList');
-        }
-    },[]);
     const signOut=()=>{
         
         localStorage.removeItem(shared.LocalStorageKeys.USER);
@@ -56,9 +60,23 @@ export const AuthWrapper=({children})=>{
         
     };
 
-    useEffect(()=>{
-
-    },[pathname,user]);
+    useEffect(() => {
+        if (pathname === "/productList" && user.id) {
+          navigate("/productList");
+        }
+    
+        if (!user.id) {
+          return;
+        }
+        // const access = shared.hasAccess(pathname, user);
+        // if (!access) {
+        //   toast.warning("Sorry, you are not authorized to access this page");
+        //   navigate("/productList");
+        //   return;
+        // }
+        // setAppInitialize(true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [pathname, user]);
 
     let value={
         user,

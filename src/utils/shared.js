@@ -21,7 +21,7 @@ const NavigationItems=[
     },
     {
         name:"Update Profile",
-        route:'./User',
+        route:'/updateProfile',
         access:[Role.Admin,Role.Buyer,Role.Seller],
     },
 ];

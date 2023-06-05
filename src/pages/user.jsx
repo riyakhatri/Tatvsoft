@@ -43,15 +43,17 @@ function User(){
         { id: "email", label: "Email", minWidth: 170 },
         { id: "roleName", label: "Role", minWidth: 130 },
       ];
-      const onConfirmDelete = () => {
-        userService
+      const onConfirmDelete = async () => {
+        await userService
           .deleteUser(selectedId)
           .then((res) => {
-if(res){toast.success("User delete sucessfully");
-            setOpen(false);
-            setFilters({ ...filters, pageIndex: 1 });}
+            if (res) {
+              toast.success("Delete sucessfully");
+              setOpen(false);
+              setFilters({ ...filters });
+            }
           })
-          .catch((e) => toast.error("Fail to delete User"));
+          .catch((e) => toast.error("Delete fail"));
       };
     return(
         
