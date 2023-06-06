@@ -1,95 +1,305 @@
-import React, { useMemo } from "react";
-import "./Header.css";
-import Logo from "../assets/images/logo-250symbol2.png";
-// import SearchBar from "./searchbar";
-import { Button, List, ListItem, TextField } from "@mui/material";
-import { Link } from "react-router-dom";
-import FreeSolo from "./searchbar";
-import {  useAuthContext } from "../context/auth";
-import shared from "../utils/shared";
+import React, { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import './Header.css';
+import { Button, ButtonGroup, List, ListItem, TextField } from '@mui/material';
+import  addIcon  from "../assets/images/tatvasoft.png";
+// import { Search } from "@mui/icons-material";
+// import Sear
+// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-function Header() {
-  const authContext =useAuthContext();
-  const items=useMemo(()=>{
-    return shared.NavigationItems.filter(
-      (item)=>!item.access.length|| item.access.includes(authContext.user.roleId)
-    );
-  },[authContext.user]);
+/* st api for search */
+import bookService from "../service/book.service";
+/* st api for search */
 
+import { useAuthContext } from "../context/auth"; //----------------------------------------------------
+import shared from "../utils/shared"
+import { RoutePaths } from "../utils/enum";
+import { toast } from "react-toastify";
+import { useCartContext } from "../context/cart";
  
-  return (
-    <div className="head1">
-      <div className="head2">
-        <div className="head3">
-          <div className="he">
-            <img src={Logo} alt="App Logo" height="72px" width="72px" />
-          </div>
-          <div className="hea">
-            <h1>Tatvasoft</h1>
-            <p>sculpting thoughts...</p>
-          </div>
-        </div>
-        <List>
-        { !authContext.user.id && (
-          <>        <div className="head4">
-          <Button variant="text">
-            <Link to="/login" style={{ color: "red", textDecoration: "none" }}>
-              Login
-            </Link>
-          </Button>
-          <Button variant="text">
-            <Link
-              to="/register"
-              style={{ color: "red", textDecoration: "none" }}
-            >
-              Register
-            </Link>
-          </Button>
-          </div>
-          </>
-          )}
-         
-          <br />
-          
-          {items.map((item,index)=>(
-            <List style={{display:"flex"}}>
-            <ListItem key={index} style={{display: "flex",
-              flexDirection: "row",width:"auto"}}>
-              
-              <Link to={item.route} title={item.name}>
-                {item.name}
-              </Link>
-              
-            </ListItem>
-            </List>
-            
-          ))}
-          
-           </List>
-           <List style={{display: "flex"}}>
-            <ListItem>
-          <Button variant="outlined" style={{ marginLeft: 15, height: 30 }}>
-            Cart
-          </Button>
-          </ListItem>
-          <ListItem >
-          {authContext.user.id &&(
-            
-            <Button variant="outlined" onClick={()=>authContext.signOut()} style={{ marginLeft: 15, height: 30 }}>
-              Logout
-            </Button>
-             )}
-            </ListItem>
-            </List>
-            
-           
+function Header() {
+
+    const authContext = useAuthContext(); 
+    const cartContext = useCartContext();
+    const navigate = useNavigate();
+
+    //----------------------------------------------------
+
+    const handlelogout = () => {
+        authContext.signOut() //--------------------------------------------
+    }
+    const handleLogin = () => {
+        navigate('/login')
+    };
+    const handleRegister = () => {
+        navigate('/register')
+    };
+    const handleCansal = () => {
+        setOpenSearchResult(false);
+    }
+
+    const [query, setquery] = useState("");
+    const [bookList, setbookList] = useState([]);
+    const [openSearchResult, setOpenSearchResult] = useState();
+
+    const searchBook = async () => {
+        try {
+            const res = await bookService.searchBook(query);
+            setbookList(res);
+            // console.log(res) // to test gloabal search api 
+        } catch (err) {
+            alert('Error occured while searching.  Check the API and try again: ', err)
+        }
+    };
+
+    const search = () => {
+        document.body.classList.add("search-result-open");
+        searchBook();
+        setOpenSearchResult(true)
+    };
+
+    const items = useMemo(() => {
+        return shared.NavigationItems.filter(
+            (item) => 
+                !item.access.length || item.access.includes(authContext.user.roleId)
+        );
+    }, [authContext.user])
+
+    const addToCart = (book) => {
+        if(!authContext.user.id) {
+            navigate('/login');
+            toast.error("Please Login before adding books to cart");
+        } else {
+            shared.addToCart(book, authContext.user.id)
+            .then((res) => {
+                if(res.error) {
+                    toast.error(res.error);
+                } else {
+                    toast.success("Item added in cart");
+                    cartContext.updateCart();
+                }
+            })
+        }
+    }
+
+
+    return(
+        <>
         
-      </div>
-      <div className="head5">
-        <FreeSolo />
-      </div>
-    </div>
-  );
+        <div className="h-container">
+            <div className="h-container-wrapper">
+                <div className="h-container-lft">
+                    <Link to='/'>
+                        <img 
+                        style={{height:60,width:150}}
+                            src={addIcon} 
+                            className="h-tt-logo" 
+                            alt="TatvaSoft logo" 
+                        />
+                    </Link>
+                </div>
+
+                <div className="h-container-rght" >
+                    
+                    <div className="h-log-reg" style={{width:350}}>
+                        {/* ----------------------------------- */}
+                        {/* <List> */}
+                        <ButtonGroup 
+                            variant="text" 
+                            aria-label="text button group"
+                        >
+                            {(!authContext.user.id) && (
+                                <>
+                                {/* <ListItem>
+                                    <Link to={RoutePaths.Register}>
+                                        Register
+                                    </Link>
+                                </ListItem>
+                                <ListItem>
+                                    <Link to={RoutePaths.Login}>
+                                        Login
+                                    </Link>
+                                </ListItem> */}
+
+                                <Button
+                                    className="h-br-1"
+                                    size="small"
+                                    sx={{ 
+                                        color: "#f14d54",
+                                        borderColor: "#f14d54 !important"
+                                    }}
+                                    onClick={handleLogin}
+                                > 
+                                    Login 
+                                </Button>
+                                                    
+                                <Button
+                                    size="small"
+                                    sx={{ 
+                                        color: "#f14d54" 
+                                    }}
+                                    onClick={handleRegister}
+                                > 
+                                    Register 
+                                </Button>
+
+                                </>
+                            )}
+                            
+                            {items.map((item, index) => (
+                                // <ListItem key={index}>
+                                //     <Link to={item.route} title={item.name}>
+                                //         {item.name}
+                                //     </Link>
+                                // </ListItem>
+
+                                <Link to={item.route} title={item.name}>
+                                    <Button
+                                        size="small"
+                                        sx={{ 
+                                            color: "#f14d54" 
+                                        }}
+                                    > 
+                                        {item.name} 
+                                    </Button>
+                                </Link>
+
+                            ))}
+                            </ButtonGroup>
+                        {/* </List> */}
+                        {/* ----------------------------------- */}
+                    </div>
+
+                    <div className="h-rght-cart">
+                        <Link to='/cart'>
+                            <Button 
+                            style={{width:120,
+                            height:40}}
+                                size="small"
+                                variant="outlined" 
+                                className="c-f14d54 b-f14d54"
+                                // startIcon={<ShoppingCartIcon />}
+                            >
+                                {cartContext.cartData.length} Cart
+                            </Button>
+                        </Link>
+                    </div>
+
+                    {(authContext.user.id) ? 
+                        <>
+                            <div className="h-rght-logout">
+                                <Button 
+                                    style={{width:120,height:40}}
+                                    size="small"
+                                    variant="outlined" 
+                                    className="c-f14d54 b-f14d54"
+                                    onClick={handlelogout}
+                                >
+                                    Log Out 
+                                </Button>
+                            </div>
+                        </> : <></>
+                    }
+                </div>
+            </div>    
+        </div>
+        
+        <div 
+            className="search-overlay"
+            onClick={ () => {
+                document.body.classList.remove('search-result-open')
+                setOpenSearchResult(false)
+            }}
+        >
+            {/* This is an Empty div     */}
+        </div>
+
+        <div className="h-searchbar">
+            <div className="h-searchbar-center">
+
+                <div className="h-txtfield">
+                    <TextField 
+                        id="outlined-basic" 
+                        placeholder='what are you looking for...' 
+                        variant="outlined" 
+                        
+                        name="text"
+                        value={query}
+                        onChange={(e) => setquery(e.target.value)}
+                    />
+                    {openSearchResult && 
+                    <>
+                        <div className="h-product-list">
+                            <div className="h-no-prod">
+                                {bookList?.length === 0 && (
+                                        <p className="h-not-found"> No Products Found </p>
+                                    )
+                                }
+                            </div>
+                            <List className="h-related-product-list">
+                                {bookList?.length > 0 && bookList.map((item, i) => {
+                                    return(
+                                        <ListItem>
+                                            <div className="h-product-list-inner">
+                                                <div className="h-inner-lft">
+                                                    <span className="txt-41 txt-lb">
+                                                        {item.name}
+                                                    </span>
+                                                    <p>
+                                                        {item.description}
+                                                    </p>
+                                                </div>
+                                                <div className="h-inner-rght">
+                                                    <span>
+                                                        {item.price}
+                                                    </span>
+                                                    <Button
+                                                        size="small"
+                                                        className="c-f14d54"
+                                                        onClick={() => addToCart(item)}
+                                                    >
+                                                        Add to Cart
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </ListItem>
+                                    )})    
+                                }
+                            </List>
+                        </div>
+                    </>
+                    }
+                </div>
+
+                <div className="h-search-btn">
+                    <Button 
+                        type="submit"
+                        variant="contained" 
+                        style={{backgroundColor:"#80BF32"}}
+                        className="bg-search" 
+                        // startIcon={<Search />}
+
+                        onClick={search}
+                    > 
+                        Search 
+                    </Button>
+                </div>
+
+                <div  className="h-search-btn">
+                    <Button 
+                        variant="contained" 
+                        className="bg-f14d54"
+                        onClick={handleCansal}
+                        style={{backgroundColor:"#f14d54"}}
+                    > 
+                        Cancel 
+                    </Button>
+                </div>
+            </div>
+        </div>
+
+        </>
+    );
 }
 
 export default Header;

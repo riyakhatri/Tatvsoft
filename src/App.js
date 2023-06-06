@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthWrapper } from './context/auth';
 import Header from './component/Header';
 import Footer from './component/Footer';
+import { CartWrapper } from './context/cart';
 
 function App() {
   
@@ -24,6 +25,7 @@ function App() {
     
     <BrowserRouter>
     <AuthWrapper>
+      <CartWrapper>
     <div>
       <Header />
       <main>
@@ -31,6 +33,7 @@ function App() {
       </main>
       <Footer />
       </div>
+      </CartWrapper>
     </AuthWrapper>
     </BrowserRouter>
     <ToastContainer />

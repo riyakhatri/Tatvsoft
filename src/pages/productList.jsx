@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 import {
+  Link,
   FormControl,
   InputLabel,
   MenuItem,
@@ -15,10 +16,12 @@ import { toast } from "react-toastify";
 import bookService from "../service/book.service";
 import { defaultFilter } from "../utils/constant";
 import categoryService from "../service/category.service";
+import { useCartContext } from "../context/cart";
 import shared from "../utils/shared";
 import "./product.css";
 
 function ProductList() {
+  const cartContext=useCartContext();
   const authContext = useAuthContext();
   const [bookResponse, setBookResponse] = useState({
     pageIndex: 0,
@@ -66,13 +69,18 @@ function ProductList() {
     }
     return [];
   }, [categories, bookResponse]);
+  
   const addToCart = (book) => {
-    shared.addToCart(book, authContext.user.id).then((res) => {
+    debugger
+    shared.addToCart(book, authContext.user.id)
+   
+    .then((res) => {
+      debugger
       if (res.error) {
         toast.error(res.message);
       } else {
         toast.success(res.message);
-        // cartContext.updateCart();
+        cartContext.updateCart();
       }
     });
   };
@@ -168,7 +176,7 @@ function ProductList() {
             <span>MRP&#8377;{book.price}</span>
            </p>
            <div>
-            <button className="product-add-button">ADD TO CART</button>
+            <button className="product-add-button" onClick={()=>addToCart(book)}> ADD TO CART</button>
            </div>
             </div>
           ))}

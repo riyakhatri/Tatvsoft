@@ -11,6 +11,7 @@ import EditUser from "../pages/EditUser";
 import EditCategory from "../pages/editCategory";
 import Category from "../pages/Category";
 import UpdateProfile from "../pages/UpdateProfile";
+import Cart from "../pages/CartPage";
 
 const AppRoutes=()=>{
     const authContext=useAuthContext();
@@ -27,6 +28,7 @@ const AppRoutes=()=>{
             <Route exact path='/edit-book' element={<EditBook />} />
             <Route exact path='/edit-book/:id' element={<EditBook />} />
             <Route exact path='/edit-user/:id' element={<EditUser />} />
+            <Route exact path='/cart' element={<Cart />} />
             
             <Route exact path='/add-category/:id' element={<EditCategory />} />
             <Route exact path='/add-category' element={<EditCategory />} />
